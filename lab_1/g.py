@@ -13,10 +13,10 @@ def nth_prime_number(n):
             count +=1
         if is_prime(pr_num) and is_prime(count):
             prime_numbers.append(pr_num)
+        if len(prime_numbers) == n:
+            break
 
-    print(prime_numbers)
-
-    return prime_numbers[n-1]
+    return prime_numbers[-1]
 
 
 
