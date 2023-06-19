@@ -2,7 +2,7 @@ def younger_person(n, ages):
     stack = []
     result = []
     for i in range(n):
-        while stack and stack[-1] >= ages[i]:
+        while stack and stack[-1] > ages[i]:
             stack.pop()
         if not stack:
             result.append(-1)
