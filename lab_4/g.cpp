@@ -1,61 +1,60 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-class Node {
-public:
+struct Node {
     int data;
-    Node* left;
-    Node* right;
+    Node *left, *right;
 };
 
 Node* newNode(int data) {
     Node* node = new Node();
     node->data = data;
-    node->left = NULL;
-    node->right = NULL;
-    return(node);
+    node->left = node->right = NULL;
+    return node;
 }
 
 Node* insert(Node* node, int data) {
-    if (node == NULL) {
-        return(newNode(data));
-    } else {
-        if (data <= node->data) {
-            node->left = insert(node->left, data);
-        } else {
-            node->right = insert(node->right, data);
-        }
-        return node;
-    }
+    if(node == NULL) return newNode(data);
+    if(data < node->data) node->left = insert(node->left, data);
+    else if(data > node->data) node->right = insert(node->right, data);
+    return node;
 }
 
-pair<int, int> diameter(Node* root) {
-    if (root == NULL) {
-        return {0, 0};
-    }
-
-    pair<int, int> l = diameter(root->left);
-    pair<int, int> r = diameter(root->right);
-
-    int height = max(l.first, r.first) + 1;
-    int diameter = max({l.first + r.first + 1, l.second, r.second});
-
-    return {height, diameter};
-}
+int diameter(Node* tree);
+int _diameter(Node* tree, int& height);
 
 int main() {
-    int N;
-    cin >> N;
+    int n;
+    cin >> n;
+    Node *root = NULL;
+    for(int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        if(root == NULL) root = insert(root, x);
+        else insert(root, x);
+    }
+    cout << diameter(root);
+    return 0;
+}
 
-    Node* root = NULL;
-    for (int i = 0; i < N; i++) {
-        int val;
-        cin >> val;
-        root = insert(root, val);
+int diameter(Node* tree) {
+    int height = 0;
+    return _diameter(tree, height);
+}
+
+int _diameter(Node* tree, int& height) {
+    int lh = 0, rh = 0;
+    int ldiameter = 0, rdiameter = 0;
+
+    if(tree == NULL) {
+        height = 0;
+        return 0;
     }
 
-    pair<int, int> res = diameter(root);
-    cout << res.second << endl;
+    ldiameter = _diameter(tree->left, lh);
+    rdiameter = _diameter(tree->right, rh);
 
-    return 0;
+    height = max(lh, rh) + 1;
+
+    return max(lh + rh + 1, max(ldiameter, rdiameter));
 }
