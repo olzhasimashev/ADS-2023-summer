@@ -1,37 +1,49 @@
-class Node:
-    def __init__(self, data):
-        self.data = data
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
         self.left = None
         self.right = None
 
-def insert(node, data):
-    if node is None:
-        return Node(data)
-    else:
-        if data < node.data:
-            node.left = insert(node.left, data)
+class Tree:
+    def __init__(self):
+        self.root = None
+    
+    def insert(self, value):
+        if self.root is None:
+            self.root = TreeNode(value)
         else:
-            node.right = insert(node.right, data)
-    return node
+            self._insert_recursive(self.root, value)
 
-def diameter(root):
-    if root is None:
-        return 0, 0
+    def _insert_recursive(self, current_node, value):
+        if value < current_node.value:
+            if current_node.left is None:
+                current_node.left = TreeNode(value)
+            else:
+                self._insert_recursive(current_node.left, value)
+        else:
+            if current_node.right is None:
+                current_node.right = TreeNode(value)
+            else:
+                self._insert_recursive(current_node.right, value)
 
-    l_height, l_diameter = diameter(root.left)
-    r_height, r_diameter = diameter(root.right)
 
-    current_height = max(l_height, r_height) + 1
-    current_diameter = max(l_height + r_height + 1, l_diameter, r_diameter)
+tree = Tree()
+n = input()
+valuesToInsert = [int(i) for i in input().split()]
 
-    return current_height, current_diameter
+for i in valuesToInsert:
+    tree.insert(i)
 
-N = int(input().strip())
-values = list(map(int, input().strip().split()))
+def findDiameter(root):
+    if not root:
+        return (0, 0)
+    
+    left = findDiameter(root.left)
+    right = findDiameter(root.right)
+    
+    currentDiameter = left[0] + right[0]
+    maxDiameter = max(left[1], right[1], currentDiameter)
+    
+    return (max(left[0], right[0]) + 1, maxDiameter)
 
-root = None
-for val in values:
-    root = insert(root, val)
-
-_, max_diameter = diameter(root)
-print(max_diameter)
+print(findDiameter(tree.root)[1] + 1)
