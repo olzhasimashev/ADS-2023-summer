@@ -4,7 +4,7 @@ Algorithms and data structures, summer term 2023
 
 ## Appendix
 
-Test #3 for lab_1, Problem B. I think there is mistake
+Test #3 for lab_1, Problem B. I think there is a mistake
 
 Input:
 
